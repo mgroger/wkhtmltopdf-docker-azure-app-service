@@ -44,20 +44,35 @@ namespace HtmlToPDF.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post(string html)
+        public IActionResult Post(string html, Boolean isBlueCard = false, Boolean isPortrait = true)
         {
             var doc = new HtmlToPdfDocument()
             {
                 GlobalSettings = {
                     PaperSize = PaperKind.Letter,
-                    Orientation = Orientation.Landscape
+                    Orientation = isBlueCard || isPortrait ? Orientation.Portrait : Orientation.Landscape,
+                    Outline = false
                 }
-
             };
+
+            if (isBlueCard)
+            {
+                doc.GlobalSettings.Margins = new MarginSettings { Left = 0, Right = 0, Top = 5 };
+            }
 
             if (!string.IsNullOrEmpty(html))
             {
-                doc.Objects.Add(new ObjectSettings {  HtmlContent = html });
+                doc.Objects.Add(new ObjectSettings {  
+                    HtmlContent = html,
+                    LoadSettings = {
+                        JSDelay = 500,
+                        StopSlowScript = false,
+                        ZoomFactor = isBlueCard ? 0.99 : 1.0
+                    }, 
+                    WebSettings = { 
+                        EnableIntelligentShrinking = false 
+                    }
+                });
             }
 
             byte[] pdf = _converter.Convert(doc);
