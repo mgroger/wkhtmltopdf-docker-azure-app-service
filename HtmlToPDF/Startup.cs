@@ -29,6 +29,13 @@ namespace HtmlToPDF
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var architectureFolder = (IntPtr.Size == 8) ? "64 bit" : "32 bit";
+            var wkHtmlToPdfPath = Path.Combine(HostingEnvironment.ContentRootPath, $"wkhtmltox\\v0.12.5\\{architectureFolder}\\libwkhtmltox");
+
+            CustomAssemblyLoadContext context = new CustomAssemblyLoadContext();
+            context.LoadUnmanagedLibrary(wkHtmlToPdfPath);
+
+
             // Add converter to DI
             services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));
 
