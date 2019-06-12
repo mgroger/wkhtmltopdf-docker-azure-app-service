@@ -14,7 +14,7 @@ FROM microsoft/dotnet:2.1-sdk AS build
 WORKDIR /src
 COPY HtmlToPDF.csproj HtmlToPDF/
 RUN dotnet restore HtmlToPDF/HtmlToPDF.csproj
-COPY . .
+COPY . ./HtmlToPDF/
 WORKDIR /src/HtmlToPDF
 RUN dotnet build HtmlToPDF.csproj -c Release -o /app
 
