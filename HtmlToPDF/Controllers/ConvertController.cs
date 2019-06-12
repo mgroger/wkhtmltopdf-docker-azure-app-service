@@ -44,14 +44,15 @@ namespace HtmlToPDF.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post(string html, Boolean isBlueCard = false, Boolean isPortrait = true)
+        public IActionResult Post(string html, Boolean isBlueCard = false, Boolean isPortrait = true, Int16 dpi = 96)
         {
             var doc = new HtmlToPdfDocument()
             {
                 GlobalSettings = {
                     PaperSize = PaperKind.Letter,
                     Orientation = isBlueCard || isPortrait ? Orientation.Portrait : Orientation.Landscape,
-                    Outline = false
+                    Outline = false, 
+                    DPI = dpi
                 }
             };
 
