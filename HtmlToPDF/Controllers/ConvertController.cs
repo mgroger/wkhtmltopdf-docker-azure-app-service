@@ -44,13 +44,14 @@ namespace HtmlToPDF.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post(string html, Boolean isBlueCard = false, Boolean isPortrait = true, Int16 dpi = 96)
+        public IActionResult Post(string html, Boolean isBlueCard = false, Boolean isInvoice = false, 
+            Boolean isPortrait = true, Int16 dpi = 96, Double zoomFactor = 1.0)
         {
             var doc = new HtmlToPdfDocument()
             {
                 GlobalSettings = {
                     PaperSize = PaperKind.Letter,
-                    Orientation = isBlueCard || isPortrait ? Orientation.Portrait : Orientation.Landscape,
+                    Orientation = isBlueCard || isInvoice || isPortrait ? Orientation.Portrait : Orientation.Landscape,
                     Outline = false, 
                     DPI = dpi
                 }
@@ -60,6 +61,10 @@ namespace HtmlToPDF.Controllers
             {
                 doc.GlobalSettings.Margins = new MarginSettings { Left = 0, Right = 0, Top = 5 };
             }
+            else if (isInvoice)
+            {
+                doc.GlobalSettings.Margins = new MarginSettings { Left = 20 };
+            }
 
             if (!string.IsNullOrEmpty(html))
             {
@@ -68,7 +73,7 @@ namespace HtmlToPDF.Controllers
                     LoadSettings = {
                         JSDelay = 500,
                         StopSlowScript = false,
-                        ZoomFactor = isBlueCard ? 0.99 : 1.0
+                        ZoomFactor = zoomFactor  //isBlueCard ? 0.99 : 1.0
                     }, 
                     WebSettings = { 
                         EnableIntelligentShrinking = false 
