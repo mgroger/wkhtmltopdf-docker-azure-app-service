@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/core/sdk:2.2 AS build-env
+FROM microsoft/dotnet:2.1-aspnetcore-runtime AS base
 RUN apt update
 RUN apt install -y libgdiplus
 RUN ln -s /usr/lib/libgdiplus.so /lib/x86_64-linux-gnu/libgdiplus.so
@@ -10,16 +10,17 @@ RUN ln -s /usr/local/lib/libwkhtmltox.so /usr/lib/libwkhtmltox.so
 WORKDIR /app
 EXPOSE 80
 
-# Copy csproj and restore as distinct layers
-COPY *.csproj ./
-RUN dotnet restore
+FROM microsoft/dotnet:2.1-sdk AS build
+WORKDIR /src
+COPY HtmlToPDF.csproj HtmlToPDF/
+RUN dotnet restore HtmlToPDF/HtmlToPDF.csproj
+COPY . .
+WORKDIR /src/HtmlToPDF
+RUN dotnet build HtmlToPDF.csproj -c Release -o /app
 
-# Copy everything else and build
-COPY . ./
-RUN dotnet publish -c Release -o out
+FROM build AS publish
+RUN dotnet publish HtmlToPDF.csproj -c Release -o /app
 
-# Build runtime image
-FROM mcr.microsoft.com/dotnet/core/aspnet:2.2
-WORKDIR /app
-COPY --from=build-env /app/out .
+FROM base AS final
+COPY --from=publish /app .
 ENTRYPOINT ["dotnet", "HtmlToPDF.dll"]
