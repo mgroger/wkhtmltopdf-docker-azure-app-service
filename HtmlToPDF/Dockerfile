@@ -1,4 +1,4 @@
-FROM microsoft/dotnet:2.1-aspnetcore-runtime AS base
+FROM mcr.microsoft.com/dotnet/aspnet:2.1 AS base
 RUN apt update && apt install -y \
     libgdiplus libssl1.0-dev && \
     ln -s /usr/lib/libgdiplus.so /lib/x86_64-linux-gnu/libgdiplus.so
@@ -13,7 +13,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 WORKDIR /app
 EXPOSE 80
 
-FROM microsoft/dotnet:2.1-sdk AS build
+FROM mcr.microsoft.com/dotnet/sdk:2.1 AS build
 WORKDIR /src
 COPY HtmlToPDF.csproj HtmlToPDF/
 RUN dotnet restore HtmlToPDF/HtmlToPDF.csproj
