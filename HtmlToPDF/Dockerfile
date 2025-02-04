@@ -1,6 +1,6 @@
 FROM mcr.microsoft.com/dotnet/aspnet:2.1 AS base
 RUN apt update && apt install -y \
-    libgdiplus libssl1.0-dev && \
+    libgdiplus libressl-dev && \
     ln -s /usr/lib/libgdiplus.so /lib/x86_64-linux-gnu/libgdiplus.so
 RUN apt-get update && apt-get install -y --no-install-recommends \
     zlib1g fontconfig libfreetype6 \
