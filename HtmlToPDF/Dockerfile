@@ -18,7 +18,7 @@ COPY --from=madnight/alpine-wkhtmltopdf-builder:0.12.5-alpine3.10-606718795 \
 RUN [ "$(sha256sum /bin/wkhtmltopdf | awk '{ print $1 }')" \
         == "06139f13500db9b0b4373d40ff0faf046e536695fa836e92f41d829696d6859f" ]
         
-RUN apk add libssl1.1
+RUN apk add libssl1.1 --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/v3.17/community/ --allow-untrusted
 RUN ln -s /usr/local/lib/libwkhtmltox.so /usr/lib/libwkhtmltox.so
 
 WORKDIR /app
