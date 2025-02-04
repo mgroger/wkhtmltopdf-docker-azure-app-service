@@ -3,9 +3,7 @@
 FROM mcr.microsoft.com/dotnet/aspnet:6.0-alpine AS base
 RUN apk add --update --no-cache \
     libgcc libstdc++ libx11 glib libxrender libxext libintl \
-    ttf-dejavu ttf-droid ttf-freefont ttf-liberation && \
-    apk add --no-cache dotnet6-runtime && \
-    apk add --no-cache  aspnetcore6-runtime
+    ttf-dejavu ttf-droid ttf-freefont ttf-liberation
 
 # On alpine static compiled patched qt headless wkhtmltopdf (46.8 MB).
 COPY --from=madnight/alpine-wkhtmltopdf-builder:0.12.5-alpine3.10-606718795 \
