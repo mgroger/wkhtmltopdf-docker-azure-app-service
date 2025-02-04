@@ -32,14 +32,12 @@ RUN apk update && \
         krb5-libs \
         libgcc \
         libintl \
-        libssl1.1 \
         libstdc++ \
         zlib \
         libstdc++ \
         libx11 \
         libxrender \
         libxext \
-        libssl1.1 \
         libjpeg \
         gcompat \
         ca-certificates \
