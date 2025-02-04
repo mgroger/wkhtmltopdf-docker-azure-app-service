@@ -1,12 +1,16 @@
 #See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
 
 FROM mcr.microsoft.com/dotnet/aspnet:6.0-alpine AS base
-RUN apk update
-RUN apk add bash icu-libs krb5-libs libgcc libintl libstdc++ zlib
-RUN apk add libgdiplus --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/v3.17/community/ --allow-untrusted
-RUN wget https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.5/wkhtmltox_0.12.5-1.stretch_amd64.deb
-RUN gdebi --n wkhtmltox_0.12.5-1.stretch_amd64.deb
-RUN apk add libssl1.1
+RUN apk add --update --no-cache \
+    libgcc libstdc++ libx11 glib libxrender libxext libintl \
+    ttf-dejavu ttf-droid ttf-freefont ttf-liberation ttf-ubuntu-font-family
+
+# On alpine static compiled patched qt headless wkhtmltopdf (46.8 MB).
+COPY --from=madnight/alpine-wkhtmltopdf-builder:0.12.5-alpine3.10-606718795 \
+    /bin/wkhtmltopdf /bin/wkhtmltopdf
+RUN [ "$(sha256sum /bin/wkhtmltopdf | awk '{ print $1 }')" \
+        == "06139f13500db9b0b4373d40ff0faf046e536695fa836e92f41d829696d6859f" ]
+
 WORKDIR /app
 
 # Install dependencies
