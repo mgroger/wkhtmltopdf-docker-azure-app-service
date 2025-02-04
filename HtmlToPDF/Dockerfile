@@ -1,7 +1,5 @@
 FROM mcr.microsoft.com/dotnet/aspnet:2.1 AS base
-RUN apt update && apt install -y \
-    libgdiplus libssl1.0-dev --update-cache --repository http://dl-3.alpinelinux.org/alpine/edge/testing/ --allow-untrusted && \
-    ln -s /usr/lib/libgdiplus.so /lib/x86_64-linux-gnu/libgdiplus.so
+RUN apk add libgdiplus --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/v3.17/community/ --allow-untrusted
 RUN apt-get update && apt-get install -y --no-install-recommends \
     zlib1g fontconfig libfreetype6 \
     libx11-6 libxext6 libxrender1 \
