@@ -31,13 +31,7 @@ RUN apk update && \
         libssl1.1 \
         libjpeg \
         gcompat \
-        ca-certificates \
-        fontconfig \
-        freetype \
-        ttf-dejavu \
-        ttf-droid \
-        ttf-freefont \
-        ttf-liberation && \
+        ca-certificates && \
     apk add --no-cache libgdiplus --repository https://dl-3.alpinelinux.org/alpine/edge/testing/ && \
     ln -s /usr/lib/libjpeg.so.8 /usr/lib/libjpeg.so.62
 
